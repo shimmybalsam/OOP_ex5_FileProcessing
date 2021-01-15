@@ -1,0 +1,61 @@
+shimmy10
+shimmy10
+
+
+=============================
+=     Design details        =
+=============================
+1. I decided to make my Filter and Order classes as abstract (as apposed to interface as written in my UML) so to my
+realization that all my different filters are each a different type of the Filter "idea". Same goes for my orders
+towards the "Order" idea. As such all my substantial filters/orders extend Filter/Order accordingly.
+
+2. I decided to create only two Type1 exceptions: BasSubFilter and BadSubOrder; as apposed to four that I wrote
+down in my UML. This is do to the fact that the other two "Invalid args" and "Bad format" fit better as part of
+ java's IOExceptions.
+
+3. I decided to create only one Type2 Exception: Bad Parameters as apposed to the many in my UML,
+because i realized that different than type1, here all I am looking for is the line in which the error was made,
+as apposed to knowing anything specific abt it.
+
+4. I decided to change from what I wrote in the UML:
+ the filterFiles() , createFilter() and createOrder() functionality, and instead of
+ returning a String[] list, Filter filter and Order order (accordingly) I call upon, create return and print a
+ LinkedLIst<File> (more explanation given in implementation details).
+ This design causes all the filtering and ordering to be completely done within the filter and order classes
+ ,taking care of those smaller problems, giving the processor and the main,
+ the freedom to deal with more genearl problems (Modularity!).
+
+=============================
+=  Implementation details   =
+=============================
+1. I implemented the createFilter() functionality to call upon the correct filter based on given arguments
+(through the filterFactory) and then calling apun the filterFiles() function which return a LinkedList of the
+filtered files. I chose a linkedList because I cannot know up ahead the amount of files which will be filteres, and
+LinkedList gives me the freedom to work without giving a specific size at time of creation; yet still allows me to add
+and iterate as easily as on an array.
+In a similar manner, I implementer the createOrder() function in the orderFactory, to call upon
+(based on given arguments) the sort() function with the correct order; completely sealing from within with the sorting
+of the files.
+Here choosing LinkedList was extremely convenient because (in java8) LinkedList already has a sort() function
+ which was easy to use and modify (using respectable overrides) to fit my sorting needs. Withing these sorts
+ I also used java's Comparator compare() function.
+
+2. I implemented my Directory Processor class as such that the main function runs the entire 'story'. All the other
+functions in the class are private (as to keep to a minimal API - Modularity). The private classes consist
+of:
+- checkForErrors(): checking for type2 errors which should stop the program completely.
+- process(): only if no type2 errors were found then process will be called and then based on the command file
+(which it receives from the main split into cells of a List (java) ), it will call upon the the filterFactory and
+OrderFactory, per each subsection in the command file, less it finds mistakes in the types of
+filter/order given in which case it will call upon a warning and proceed with the default
+filter/order accordingly.
+At the end of each subsection, once the files are filtered and sorted as needed,
+it will call upon the third and final private function in the class:
+printList(): recieves a list filled with this round/subsection's warnings and add to it the files which have been
+filtered and sorted and then print per subsection its warnings and files.
+
+=============================
+=    Answers to questions   =
+=============================
+Answers to questions 1 and 2 are explained in Design details, above.
+Answer to question 3 is explained in Implementation details, above.
